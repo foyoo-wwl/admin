@@ -1,6 +1,10 @@
 body{
-    background:url(./Mjjlh_02.png);
-        #app{
+    background:#ccc;
+        #root{
             font-size:100px;
+            .jsx{
+                color:blue;
+                font-size: 20px;
+            }
         }
 }
