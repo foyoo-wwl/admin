@@ -7,7 +7,15 @@ module.exports = {
         entry: './src/app.jsx',
         output: {
             path: path.resolve(__dirname, 'dist'),
-            filename: 'js/app.js'
+            filename: 'js/app.js',
+            publicPath: WEBPACK_ENV === 'dev' 
+            ? '/dist/' : '//s.jianliwu.com/admin-v2-fe/dist/'
+        },
+        resolve:{
+            alias:{
+                page: path.resolve(__dirname, 'src/pages'),
+                component: path.resolve(__dirname, 'src/component'),
+            }
         },
         module: {
             rules: [
@@ -80,6 +88,10 @@ module.exports = {
             })
         ],
         devServer: {
-            port:8086
+            port:8086,
+            historyApiFallback:{
+                index:'/dist/index.html'
+            }
         }
+        
 };
