@@ -20,7 +20,7 @@ class SideNav extends React.Component{
             <div>
                 <Card
                     hoverable
-                    style={{ width: '100%' }}
+                    style={{ width: '100%',borderRadius:0,border:'none'}}
                     cover={<img alt="example" src="dist/assets/logo.svg" style={{width:'60%',margin:"0 auto"}} />}
                 >
                     <Meta 
