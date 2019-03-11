@@ -13,9 +13,9 @@ export default class PageTitle extends React.Component{
     }
     render(){
         return(
-            <Row id='PageTitle'>
-                <Col span={24}>
-                    <Title>{this.props.title}</Title>
+            <Row id='PageTitle' type="flex" justify="center" algin='middle'>
+                <Col span={12}>
+                    <Title style={{textAlign:'center'}} level={3}>{this.props.title}</Title>
                     {this.props.children}
                 </Col>              
             </Row>
