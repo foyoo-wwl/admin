@@ -1,8 +1,13 @@
 import React from 'react'
-import { Menu, Icon, Button , Typography , Card ,Avatar  } from 'antd';
+import { Menu, Icon, Typography , Card ,Avatar} from 'antd';
+import {NavLink,NavNavLink} from 'react-router-dom'
 
+import menuList from './navConfig.js'
+
+import './index.scss'
 const { Title } = Typography;
 const { Meta } = Card;
+const {SubMenu} = Menu;
 class SideNav extends React.Component{
     constructor(props){
         super(props)
@@ -10,10 +15,37 @@ class SideNav extends React.Component{
             collapsed: false,
         }
     }   
+    componentWillMount(){
+        const menuTreeNode = this.renderMenu(menuList)
+        this.setState({
+            menuTreeNode
+        })
+    }
     toggleCollapsed(){
         this.setState({
           collapsed: !this.state.collapsed,
         });
+    }
+    renderMenu(data){
+        console.log(data)
+        return data.map((item)=>{
+            if(item.children){
+                return (
+                    <SubMenu key={item.key} title={<span><Icon type={item.icon}/><span>{item.title}</span></span>}>
+                        {this.renderMenu(item.children)}
+                    </SubMenu>                   
+                )
+            }
+            return(
+                    <Menu.Item key={item.key} >
+                        <NavLink to={item.key} 
+                            activeClassName='active-menu' 
+                        >
+                            <Icon type={item.icon} />{item.title}
+                        </NavLink>
+                    </Menu.Item>   
+            )
+        })
     }
     render(){
         return(
@@ -36,21 +68,12 @@ class SideNav extends React.Component{
                     theme="dark"
                     inlineCollapsed={this.state.collapsed}
                 >
-                    <Menu.Item key="1">
-                        <Icon type="pie-chart" />
-                        <span>Option 1</span>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <Icon type="desktop" />
-                        <span>Option 2</span>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                        <Icon type="inbox" />
-                        <span>Option 3</span>
-                    </Menu.Item>
+                    {this.state.menuTreeNode}
                 </Menu>
             </div>
         )
     }
 }
 export default SideNav;
+
+ 
