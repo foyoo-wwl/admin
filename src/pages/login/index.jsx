@@ -1,21 +1,48 @@
 import React from 'react'
 import {Form, Icon, Input, Button, Checkbox,Row,Col,Typography } from 'antd';
 import PageTitle from 'page/page-title/index.jsx';
-import Ajax from './../../server/ajax.jsx'
+import AjaxEasy from 'server/index.js'
+import { Modal } from 'antd';
 
-
-const {Title} = Typography;
-const _ajax = new MUtil()
+const _user_ = new AjaxEasy()
 class Login extends React.Component {
-    handleSubmit(e){
-        // Ajax.request({
-        // })
-        // this.props.form.validateFields((err, values) => {
-        //     if (!err) {
-        //     console.log(err)
-        //     console.log('Received values of form: ', values);
-        //     }
-        // });
+    constructor(props){
+        super(props)
+        this.state = {
+            redirect:_user_.gerUrlParam('redirect') || '/'
+        }
+    }
+    handleSubmit(){      
+        const _redirect = this.state.redirect
+        const _this = this
+        this.props.form.validateFields((err, values) => {        
+            console.log(_redirect)  
+            if (!err) {
+                _user_.ajax({
+                    method:'post',
+                    url:'/login',
+                    data:{
+                        userName:values.userName,
+                        password:values.password
+                    }
+                }).then((res)=>{                  
+                    if(values.userName === res.userName && values.password=== res.password){
+                        Modal.success({
+                            title:'登录',
+                            content:'登录成功',
+                            onOk:function(){
+                                _this.props.history.push(_redirect)
+                            }
+                        })
+                    }else{
+                        Modal.error({
+                            title:'登录',
+                            content:'账号密码错误'
+                        })
+                    }
+                })             
+            }
+        });
     }
     render() {
       const { getFieldDecorator } = this.props.form;

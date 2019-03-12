@@ -27,7 +27,6 @@ class SideNav extends React.Component{
         });
     }
     renderMenu(data){
-        console.log(data)
         return data.map((item)=>{
             if(item.children){
                 return (
