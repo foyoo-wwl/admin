@@ -1,26 +1,31 @@
 const baseUrl = 'https://www.easy-mock.com/mock/5c862e9d83bce068aab20486/axiostest'
 class MUtil{   
-    request(param){
-        return new Promise((resolve,reject)=>{
-            $.ajax({
-                type:param.type || 'get',
-                url:baseUrl+param.url,
-                dataType:param.dataType || 'json',
-                data:param.data || null,
-                success(res){
-                    //请求成功
-                    if(0 === res.code){
-                        typeof resolve === 'function' && resolve(res.msg && res.data)
-                        
-                    }else{
-                        typeof reject === 'function' && reject(res.msg)
-                    }
-                },
-                error(err){
-                    typeof reject === 'function' && reject(err.statusText)
-                }
-            })
-        })
+    //存储内容
+    setStorage(name,data){
+        let dataType = typeof data;
+        //json类型
+        if(typeof data === 'object'){
+            window.localStorage.setItem(name,JSON.stringify(data))
+        }
+        //基础类型
+        else if(['number','string','boolean'].indexOf(dataType)>=0){
+            window.localStorage.setItem(name,data)
+        }else{
+            alert('该类型不能用于本地存储')
+        }
+    }
+    //取存储内容
+    getStorage(name){
+        let data = window.localStorage.getItem(name);
+        if(data){
+            return JSON.parse(data)
+        }else{
+            return ''
+        }
+    }
+    //删除存储
+    removeStorage(name){
+        window.localStorage.removeItem(name)
     }
 }
 

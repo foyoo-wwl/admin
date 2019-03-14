@@ -23,6 +23,35 @@ class AjaxEasy{
             })
         });
     }
+    //检查登录接口是不是合法
+    checkLogin(logininfo){
+        return new Promise((resolve,reject)=>{
+            //判断用户名不能为空
+            let userName = $.trim(logininfo.userName),
+                password = $.trim(logininfo.password);
+            console.log(userName)
+            if(userName.length > 1 && password.length > 1){
+                resolve({
+                    status:false,
+                    msg:'用户名密码长度不能大于1'
+                })
+            }else if(userName.length > 1 && password.length === 1){
+                resolve({
+                    status:false,
+                    msg:'用户名长度不能大于1'
+                })                
+            }else if(userName.length === 1 && password.length > 1){
+                resolve({
+                    status:false,
+                    msg:'密码长度不能大于1'
+                })                
+            }else if(userName.length === 1 && password.length === 1){
+                resolve({
+                    status:true
+                })                
+            }
+        })
+    }
     //跳转登录
     doLogin(){
         window.location.href='/login?redirect=' + encodeURIComponent(window.location.pathname)
@@ -30,8 +59,7 @@ class AjaxEasy{
     //获取url参数
     gerUrlParam(name){
         //xxxx.com?param=1235&param1=123
-
-        let queryString = window.location.search.split('?')[1] || [],
+        let queryString = window.location.search.split('?')[1] || '',
             reg = new RegExp("(^|&)"+name+"=([^&]*)(&|$)"),
             result = queryString.match(reg);
         return result ? decodeURIComponent(result[2]) : null
