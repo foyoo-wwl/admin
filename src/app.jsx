@@ -6,6 +6,7 @@ import LayOut from 'component/layout/index.jsx'
 import Login from 'page/login/index.jsx'
 import ErrorPage from 'page/error/index.jsx'
 import UserList from 'page/uer/index.jsx'
+import ProductRouter from 'page/product/router.jsx'
 import {BrowserRouter,Switch,Route,Redirect} from 'react-router-dom'
 
 import './app.css'
@@ -14,7 +15,8 @@ let layoutRouter = (
     <LayOut>
         <Switch>
             <Route exact path='/' component={Home} />
-            <Route path='/detail' component={Detail} />
+            <Route path='/home' component={Home} />
+            <Route path='/product' component={ProductRouter} />
             <Route path='/user/index' component={UserList} />
             <Redirect exact from='/user' to='/user/index'/>
             <Route component={ErrorPage} />

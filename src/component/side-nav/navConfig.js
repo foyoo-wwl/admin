@@ -6,17 +6,17 @@ const menuList = [
     },
     {
         title:"商品",
-        key:'/detail',
+        key:'/product',
         icon:'database',
         children:[
             {
                 title: '商品管理',
-                key: '/goods/spgl',
+                key: '/product/index',
                 icon:'layout'
             },
             {
                 title: '品类管理',
-                key: '/goods/plgl',
+                key: '/product/catagory',
                 icon:'idcard'
             }          
         ]

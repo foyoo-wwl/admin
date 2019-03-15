@@ -1,6 +1,6 @@
 import JsonP from 'jsonp'
 import Axios from 'axios'
-
+import {message} from 'antd'
 class AjaxEasy{
     ajax(option){
         // console.log('ajax herre')
@@ -20,6 +20,8 @@ class AjaxEasy{
                 if(res.data.code == 0){
                     resolve(res.data.data)
                 }
+            },(err)=>{
+                message.info('请求失败')
             })
         });
     }
