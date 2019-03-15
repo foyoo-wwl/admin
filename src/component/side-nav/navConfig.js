@@ -40,7 +40,7 @@ const menuList = [
         children:[
             {
                 title: '用户管理',
-                key: '/user/yhgl',
+                key: '/user/index',
                 icon:'setting'
             }         
         ]        
