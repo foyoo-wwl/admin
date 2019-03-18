@@ -1,18 +1,20 @@
 import React,{Fragment}from 'react'
-import { Table,Row,Col,Button} from 'antd';
+import { Table,Row,Col,Button,Input,message,Select } from 'antd';
 import {Link} from 'react-router-dom'
 import AjaxEasy from 'server/index.js'
 import json from './demo.js'
 
-
 const _ajax = new AjaxEasy()
+const Search = Input.Search;
+const Option = Select.Option;
 export default class ProductList extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             selectedRowKeys: [],
             loading: false,
-            data:null
+            data:json.data.item_list,
+            selectId:0
         };
     }
     componentDidMount(){
@@ -21,27 +23,45 @@ export default class ProductList extends React.Component {
                 method:'get'
             }).then((res)=>{
                 this.setState({
-                    data:res.item_list
+                    data:res.item_list,
+                    _data:JSON.stringify(res.item_list)
                 })
-            },()=>{
-                this.setState({
-                    data:json.data.item_list
-                })   
-            })
-     
-    }
-    findData(){
+            })   
+            
     }
     wwl(id,record,index){
         let _data = this.state.data;
-        _data.map((item)=>{
-            console.log(item.ID)
+        for(let i=0,_len=_data.length;i<_len;i++){
+           if(_data[i].ID == id){
+                if(_data[i].status == 1){
+                    _data[i].status = 0
+                }else{
+                    _data[i].status = 1
+                }
+                this.setState({
+                    data:_data
+                })
+           }
+        }
+    }
+    listSearch(value){
+        _ajax.ajax({
+            url:'productsearch',
+            method:'post',
+            data:{
+                value:value
+            }
+        }).then((res)=>{
+            message.info('搜索成功')
+            setTimeout(()=>{
+                this.props.history.push('/product/index/'+this.state.selectId)
+            },1000)         
+        })        
+    }
+    handleChange(e){
+        this.setState((perveData)=>{
+            perveData.selectId=e
         })
-
-        // _data[index].status = _data[index].status == 1 ? 0 :1;
-        // this.setState({
-        //     data:_data
-        // })
     }
     render() {
         const columns = [
@@ -105,9 +125,33 @@ export default class ProductList extends React.Component {
         ];
         return (
             <Fragment>
-                <Row style={{marginTop:20}}>
+                <Row style={{marginTop:20}}>  
+                    <Col span={4} offset={2}>
+                        <Select
+                            showSearch
+                            style={{ width: 200 }}
+                            placeholder="搜索ID"
+                            optionFilterProp="children"
+                            size="large"
+                            onChange={this.handleChange.bind(this)}
+                        >
+                            {                   
+                                this.state.data.map((item)=>{
+                                    return(
+                                        <Option value={item.ID} key={item.key}>{item.ID}</Option>
+                                    )
+                                })         
+                            }
+                        </Select> 
+
+                    </Col>                 
+                    <Col span={1} offset={0} onClick={this.listSearch.bind(this)}>
+                        <Button type="primary" icon="search" size="large">Search</Button>
+                    </Col>                               
+                </Row>
+                <Row style={{marginTop:20}}> 
                     <Col span={20} offset={2}>
-                        <Table columns={columns} dataSource={this.state.data} scroll={{y:500}} bordered={true}/>
+                        <Table columns={columns} dataSource={this.state.data} scroll={{y:400}} bordered={true}/>
                     </Col>              
                 </Row>              
             </Fragment>
